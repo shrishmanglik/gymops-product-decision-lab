@@ -1,0 +1,1 @@
+{"ruleId":"GO-R01","case":"unlabelled-customer-claim","mutation":"tamper-signal-digest","expectedCode":"UNSOURCED_OR_UNLABELLED_SIGNAL"}

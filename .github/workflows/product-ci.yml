@@ -1,0 +1,59 @@
+name: Product CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: product-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and adversarial controls
+        run: npm test
+
+      - name: Reproduce deterministic receipt
+        run: npm run proof
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser, accessibility, security, and viewport proof
+        run: npm run test:e2e
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
+      # The cross-repository contamination gate requires the authorized local
+      # Application-Projects fleet and fails on an empty population. Its exact
+      # release-SHA receipt is reviewed separately; isolated CI must not fake it.

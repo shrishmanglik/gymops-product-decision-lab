@@ -1,0 +1,1 @@
+{"ruleId":"GO-R06","case":"membership-dependency-omitted","mutation":"omit-membership-surface","expectedCode":"SURFACE_OR_DEPENDENCY_OMITTED"}

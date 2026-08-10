@@ -1,0 +1,201 @@
+{
+  "version": "LocalEngineProof.v1",
+  "sourceState": "UNCOMMITTED_AUTHOR_TREE",
+  "seedGeneratedAt": "2026-08-10T15:00:00.000Z",
+  "ruleSetVersion": "GO-1.1.0",
+  "normalizedByteLength": 4264,
+  "firstSha256": "a02713e923b89d2db060ca6b76e840f169a62bcdad30d893dbc13f6f1a4194f0",
+  "secondSha256": "a02713e923b89d2db060ca6b76e840f169a62bcdad30d893dbc13f6f1a4194f0",
+  "byteIdentical": true,
+  "fixtureFiles": 24,
+  "expectedFixturePairs": 12,
+  "cleanControls": 12,
+  "disposition": "SPEC_READY_FOR_HUMAN_REVIEW",
+  "releaseAuthorized": false,
+  "externalMutation": false,
+  "receipt": {
+    "version": "GymOpsDecisionReceipt.v1",
+    "ruleSetVersion": "GO-1.1.0",
+    "inputDigest": "4687c76d1b36f143ff71a65b3c43352fd37e0a934ad4885e3e0d19cf94abc475",
+    "controlDigest": "7293e8fb63e640c93401a5cb9b4c21b8578c167b4601bbe36aa2bd101e5c93b5",
+    "disposition": "SPEC_READY_FOR_HUMAN_REVIEW",
+    "releaseAuthorized": false,
+    "externalMutation": false,
+    "results": [
+      {
+        "id": "GO-R01",
+        "name": "Signal truth",
+        "state": "PASS",
+        "code": "GO-R01_PASS",
+        "summary": "Every signal is explicitly synthetic and its content digest verifies.",
+        "evidence": [
+          "SIG-OWNER-01:1838272af2af",
+          "SIG-MEMBER-02:7a7a967ead89",
+          "SIG-USAGE-03:57c989deca9b",
+          "SIG-COUNTER-04:53f776d382aa"
+        ]
+      },
+      {
+        "id": "GO-R02",
+        "name": "Current workflow",
+        "state": "PASS",
+        "code": "GO-R02_PASS",
+        "summary": "The workflow is versioned, evidence-linked, unexpired, and preserves unknowns.",
+        "evidence": [
+          "WF-WAITLIST-01",
+          "1.0.0",
+          "2026-09-10T15:00:00.000Z"
+        ]
+      },
+      {
+        "id": "GO-R03",
+        "name": "Problem before solution",
+        "state": "PASS",
+        "code": "GO-R03_PASS",
+        "summary": "Requested solutions resolve to a bounded problem frame with non-goals.",
+        "evidence": [
+          "PROBLEM-CAPACITY-01",
+          "SIG-OWNER-01",
+          "SIG-MEMBER-02",
+          "SIG-USAGE-03"
+        ]
+      },
+      {
+        "id": "GO-R04",
+        "name": "Evidence convergence",
+        "state": "PASS",
+        "code": "GO-R04_PASS",
+        "summary": "Multiple source classes converge and counterevidence remains visible.",
+        "evidence": [
+          "observation",
+          "support",
+          "usage",
+          "SIG-COUNTER-04"
+        ]
+      },
+      {
+        "id": "GO-R05",
+        "name": "Actor cost",
+        "state": "PASS",
+        "code": "GO-R05_PASS",
+        "summary": "Member benefit and staff/operator cost are both represented by guardrails.",
+        "evidence": [
+          "member",
+          "staff",
+          "owner"
+        ]
+      },
+      {
+        "id": "GO-R06",
+        "name": "Surface impact",
+        "state": "PASS",
+        "code": "GO-R06_PASS",
+        "summary": "All four operating surfaces and their controlling dependencies are named.",
+        "evidence": [
+          "scheduling",
+          "attendance",
+          "membership",
+          "communications",
+          "Membership eligibility",
+          "Communication permission",
+          "Class capacity",
+          "Staff pause"
+        ]
+      },
+      {
+        "id": "GO-R07",
+        "name": "Defensible priority",
+        "state": "PASS",
+        "code": "GO-R07_PASS",
+        "summary": "Build, defer, and reject calls carry option-specific evidence, risk, and capacity reasons.",
+        "evidence": [
+          "Timed waitlist offer:PROTOTYPE_CANDIDATE",
+          "CONVERGENT_SYNTHETIC_SIGNALS",
+          "BOUNDED_AND_REVERSIBLE",
+          "GUARDRAILS_DEFINED",
+          "Unlimited overbooking:DO_NOT_BUILD",
+          "CAPACITY_CONSTRAINT_VIOLATION",
+          "MEMBER_AND_STAFF_HARM",
+          "Predictive no-show scoring:DISCOVERY_REQUIRED",
+          "DATA_SUFFICIENCY_UNKNOWN",
+          "CONSENT_UNKNOWN",
+          "BIAS_CONTROL_MISSING"
+        ]
+      },
+      {
+        "id": "GO-R08",
+        "name": "Buildable spec",
+        "state": "PASS",
+        "code": "GO-R08_PASS",
+        "summary": "The spec names goals, exclusions, transitions, edge cases, and acceptance criteria.",
+        "evidence": [
+          "6 transitions",
+          "8 edge cases",
+          "7 acceptance criteria"
+        ]
+      },
+      {
+        "id": "GO-R09",
+        "name": "Measurement",
+        "state": "PASS",
+        "code": "GO-R09_PASS",
+        "summary": "The baseline is honest and the outcome contract includes no-harm guardrails.",
+        "evidence": [
+          "baselineState:UNKNOWN",
+          "baselineEvidence:NONE",
+          "UNKNOWN until an authorized implementation supplies a measured current-state baseline.",
+          "Share of released synthetic places reaching a terminal reserved or explicitly blocked state within the measurement window.",
+          "Any capacity overflow",
+          "Any permission bypass",
+          "Any duplicate reservation"
+        ]
+      },
+      {
+        "id": "GO-R10",
+        "name": "Reversibility",
+        "state": "PASS",
+        "code": "GO-R10_PASS",
+        "summary": "Pause, staged rollout, rollback triggers, and reconciliation are explicit.",
+        "evidence": [
+          "Pause progression",
+          "Invalidate current offer",
+          "Return to manual handling",
+          "Reconcile the canonical event trail",
+          "Pause offers",
+          "Invalidate open offers",
+          "Restore manual queue handling",
+          "Reconcile every local receipt"
+        ]
+      },
+      {
+        "id": "GO-R11",
+        "name": "AI accountability",
+        "state": "PASS",
+        "code": "GO-R11_PASS",
+        "summary": "AI suggestions remain evidence-bound and a distinct human owner still controls release.",
+        "evidence": [
+          "coverage:1",
+          "review:PENDING",
+          "externalMutation:false"
+        ]
+      },
+      {
+        "id": "GO-R12",
+        "name": "Waitlist transition integrity",
+        "state": "PASS",
+        "code": "GO-R12_PASS",
+        "summary": "Capacity, eligibility, permission, active-token, expiry, pause/resume, blocked-member, and exact-reset behavior are explicit and no-write bounded.",
+        "evidence": [
+          "happy:OFFER_ACTIVE to RESERVED",
+          "expiry:EXPIRED to next OFFER_ACTIVE",
+          "ineligible:BLOCKED_INELIGIBLE",
+          "no-permission:BLOCKED_PERMISSION",
+          "full:BLOCKED_FULL",
+          "paused:BLOCKED_PAUSED",
+          "reset:Exact seed digest restored",
+          "externalMutation:false"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"ruleId":"GO-R05","case":"member-win-staff-cost-hidden","mutation":"hide-staff-actor","expectedCode":"ACTOR_COST_UNASSESSED"}

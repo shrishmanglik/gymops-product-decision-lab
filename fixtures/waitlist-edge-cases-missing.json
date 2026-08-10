@@ -1,0 +1,1 @@
+{"ruleId":"GO-R08","case":"waitlist-edge-cases-missing","mutation":"replace-edge-cases","expectedCode":"SPEC_CONTRACT_INCOMPLETE"}
