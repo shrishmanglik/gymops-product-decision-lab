@@ -1,0 +1,1 @@
+{"ruleId":"GO-R03","case":"feature-request-as-problem","mutation":"erase-problem-frame","expectedCode":"PROBLEM_FRAME_MISSING"}

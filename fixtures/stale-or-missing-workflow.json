@@ -1,0 +1,1 @@
+{"ruleId":"GO-R02","case":"stale-or-missing-workflow","mutation":"expire-workflow","expectedCode":"WORKFLOW_SNAPSHOT_INVALID"}

@@ -1,0 +1,17 @@
+{
+  "version": "ContaminationReport.v1",
+  "algorithm": "normalized-material-paragraph-and-12-word-sequence-sha256",
+  "currentFiles": 50,
+  "currentMaterialSequences": 1314,
+  "externalRepos": 43,
+  "externalFiles": 1359,
+  "bannedFindings": [],
+  "proseCollisions": [],
+  "exceptions": [
+    "license text",
+    "dependency-generated boilerplate",
+    "framework command names",
+    "canonical claim-state labels"
+  ],
+  "state": "PASS"
+}

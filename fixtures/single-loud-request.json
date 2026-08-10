@@ -1,0 +1,1 @@
+{"ruleId":"GO-R04","case":"single-loud-request","mutation":"collapse-evidence-source","expectedCode":"EVIDENCE_NOT_CONVERGENT"}

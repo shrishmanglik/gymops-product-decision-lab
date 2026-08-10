@@ -1,0 +1,1 @@
+{"ruleId":"GO-R07","case":"priority-without-say-no-reason","mutation":"replace-reject-reason","expectedCode":"PRIORITY_REASON_INCOMPLETE"}

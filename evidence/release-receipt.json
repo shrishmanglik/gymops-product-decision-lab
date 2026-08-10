@@ -1,0 +1,19 @@
+{
+  "version": "ReleaseReceipt.v1",
+  "claimCeiling": "SOTA_CANDIDATE",
+  "state": "LOCAL_BUILD_PENDING_DISTINCT_REVIEW",
+  "sourceCommit": "UNKNOWN_UNTIL_AUTHOR_COMMIT",
+  "pullRequest": "UNKNOWN",
+  "distinctReview": "PENDING",
+  "providerProject": "UNKNOWN",
+  "deploymentId": "UNKNOWN",
+  "productionUrl": "UNKNOWN",
+  "anonymousDesktopSmoke": "PENDING",
+  "anonymousMobileSmoke": "PENDING",
+  "packageLinked": false,
+  "applicationSubmitted": false,
+  "externalMutation": false,
+  "localEngineProofByteLength": 5885,
+  "localEngineProofFileSha256": "b2c1fc2ff85aab33a40de771b9b5daf5f9b1def5eeef19d40786ea1de8dd500c",
+  "localEngineProofCanonicalSha256": "c5fab4b24a6a4722e7b665ba9aa2a50774594f7358306c3d4a8cd20bee003939"
+}

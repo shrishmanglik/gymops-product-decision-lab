@@ -1,0 +1,1 @@
+{"ruleId":"GO-R10","case":"irreversible-rollout","mutation":"remove-reversibility","expectedCode":"REVERSIBILITY_CONTRACT_INCOMPLETE"}
