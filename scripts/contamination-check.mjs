@@ -3,7 +3,9 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "
 import { basename, extname, join, relative, resolve } from "node:path";
 
 const repoRoot = process.cwd();
-const fleetRoot = resolve(repoRoot, "..");
+const fleetRoot = process.env.GYMOPS_FLEET_ROOT?.trim()
+  ? resolve(process.env.GYMOPS_FLEET_ROOT)
+  : resolve(repoRoot, "..");
 const reportPath = join(repoRoot, "evidence", "contamination-report.json");
 const selfPath = join(repoRoot, "scripts", "contamination-check.mjs");
 const extensions = new Set([".md", ".ts", ".tsx", ".json"]);
@@ -112,7 +114,12 @@ let externalFiles = 0;
 if (existsSync(fleetRoot)) {
   for (const entry of readdirSync(fleetRoot, { withFileTypes: true })) {
     const root = join(fleetRoot, entry.name);
-    if (!entry.isDirectory() || resolve(root) === resolve(repoRoot) || !existsSync(join(root, ".git"))) continue;
+    if (
+      !entry.isDirectory()
+      || resolve(root) === resolve(repoRoot)
+      || entry.name.toLowerCase() === basename(repoRoot).toLowerCase()
+      || !existsSync(join(root, ".git"))
+    ) continue;
     externalRepos += 1;
     for (const path of walk(root)) {
       const rel = relative(root, path).replaceAll("\\", "/");
@@ -138,6 +145,9 @@ const report = {
   currentMaterialSequences: currentSequences.size,
   externalRepos,
   externalFiles,
+  populationIssues: externalRepos === 0
+    ? ["No sibling product repository was available for the cross-repository prose comparison."]
+    : [],
   bannedFindings,
   proseCollisions,
   exceptions: [
@@ -146,9 +156,9 @@ const report = {
     "framework command names",
     "canonical claim-state labels",
   ],
-  state: bannedFindings.length === 0 && proseCollisions.length === 0 ? "PASS" : "FAIL",
+  state: externalRepos > 0 && bannedFindings.length === 0 && proseCollisions.length === 0 ? "PASS" : "FAIL",
 };
 
 writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
-process.stdout.write(`${JSON.stringify({ state: report.state, currentFiles: report.currentFiles, externalRepos, externalFiles, bannedFindings: bannedFindings.length, proseCollisions: proseCollisions.length })}\n`);
+process.stdout.write(`${JSON.stringify({ state: report.state, currentFiles: report.currentFiles, externalRepos, externalFiles, populationIssues: report.populationIssues.length, bannedFindings: bannedFindings.length, proseCollisions: proseCollisions.length })}\n`);
 if (report.state !== "PASS") process.exitCode = 1;
