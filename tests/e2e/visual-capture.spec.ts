@@ -1,6 +1,7 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import sharp from "sharp";
 
 test("captures the primary journey at the release viewports", async ({ page }, testInfo) => {
   const output = join(process.cwd(), "evidence", "screenshots");
@@ -19,10 +20,15 @@ test("captures the primary journey at the release viewports", async ({ page }, t
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     });
     // Full-page Chromium capture tiles fixed/sticky elements at intermediate
-    // scroll offsets. Freeze only those two chrome elements for a faithful page
-    // evidence image; interactive browser tests still exercise production CSS.
-    await page.addStyleTag({ content: ".site-header{position:static!important}.skip-link{display:none!important}" });
-    await page.screenshot({ path: join(output, `${name}.png`), fullPage: true });
+    // scroll offsets. Freeze the sticky navigation/index surfaces only for a
+    // faithful evidence image; interactive browser tests still exercise production CSS.
+    await page.addStyleTag({
+      content: ".site-header,.scenario-panel,.spec-index{position:static!important}.skip-link{display:none!important}",
+    });
+    const screenshot = await page.screenshot({ fullPage: true, animations: "disabled" });
+    await sharp(screenshot)
+      .png({ compressionLevel: 9, adaptiveFiltering: false, palette: false })
+      .toFile(join(output, `${name}.png`));
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
   }
 });

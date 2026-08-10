@@ -26,6 +26,7 @@ Both passes produced:
 - normalized decision proof: 11 clean controls, 22 fixture files, byte-identical repeat output;
 - local proof SHA-256: `5f55634eca2b7fe68ead3888bf610138066c453bca0d5ca7d8ba388f78855947` on both passes;
 - browser suite: 22 of 22 pass twice in desktop and mobile Chromium projects, including the HTTP security and no-off-origin-request boundary;
+- eight screenshot outputs are byte-identical across two complete capture runs after evidence-only sticky-surface freezing and deterministic PNG normalization;
 - release authorization: false.
 
 The production dependency audit separately returned zero vulnerabilities. The combined two-pass shell command reached its 120-second orchestration limit after the second build and deterministic proof, so the unfinished second browser suite and audit were run as a separate checked command. That second browser suite passed 22 of 22 and the audit again reported zero vulnerabilities; the timeout itself is not represented as a green gate.

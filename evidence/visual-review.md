@@ -23,7 +23,8 @@ This is author preparation, not independent release review.
 2. The initial 375-pixel proof page overflowed because long control content did not permit a grid child to shrink. All code strings now wrap and every tested width fits.
 3. The initial mobile workflow heading compressed its eyebrow into a narrow vertical column. The section heading now stacks normally below 600 pixels.
 4. Eleven control cards initially left a visually false empty cell. The final control now spans the full row on wide screens and returns to one column on mobile.
-5. Chromium full-page capture tiled sticky and skip-link chrome at intermediate scroll positions. The capture test freezes only those chrome elements while taking evidence images; interactive browser tests continue to exercise the production sticky header and focusable skip link.
+5. Chromium full-page capture tiled sticky navigation and index surfaces at intermediate scroll positions. The evidence-only capture freezes those surfaces and the skip link while interactive browser tests continue to exercise the production sticky behavior and focusable skip link.
+6. Raw Chromium PNG compression and a sticky scenario index made one clean-clone screenshot byte-unstable. The capture now normalizes pixels through a pinned PNG encoder and freezes the evidence-only index position; two complete capture runs produce byte-identical files across all eight screenshots.
 
 ## Final geometry review
 
