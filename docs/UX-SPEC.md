@@ -46,13 +46,13 @@ The experience is an operations board, not a generic analytics dashboard. Schedu
 ### `/spec`
 
 - A sticky section index supports rapid review on desktop and becomes inline on small viewports.
-- Eleven sections carry goals through unknowns.
+- Eleven specification sections carry goals through unknowns.
 - The outcome contract visually separates its four no-harm guardrails.
 
 ### `/proof`
 
 - Canonical input and control digests precede control claims.
-- All eleven results expose rule identifier, state, exact code, and plain-language meaning.
+- All twelve control results expose rule identifier, state, exact code, and plain-language meaning.
 - AI assistance, claim ceiling, implemented scope, proposals, and unknowns remain distinct.
 
 ## State language

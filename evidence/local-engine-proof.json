@@ -2,22 +2,22 @@
   "version": "LocalEngineProof.v1",
   "sourceState": "UNCOMMITTED_AUTHOR_TREE",
   "seedGeneratedAt": "2026-08-10T15:00:00.000Z",
-  "ruleSetVersion": "GO-1.0.0",
-  "normalizedByteLength": 3711,
-  "firstSha256": "5f55634eca2b7fe68ead3888bf610138066c453bca0d5ca7d8ba388f78855947",
-  "secondSha256": "5f55634eca2b7fe68ead3888bf610138066c453bca0d5ca7d8ba388f78855947",
+  "ruleSetVersion": "GO-1.1.0",
+  "normalizedByteLength": 4264,
+  "firstSha256": "a02713e923b89d2db060ca6b76e840f169a62bcdad30d893dbc13f6f1a4194f0",
+  "secondSha256": "a02713e923b89d2db060ca6b76e840f169a62bcdad30d893dbc13f6f1a4194f0",
   "byteIdentical": true,
-  "fixtureFiles": 22,
-  "expectedFixturePairs": 11,
-  "cleanControls": 11,
+  "fixtureFiles": 24,
+  "expectedFixturePairs": 12,
+  "cleanControls": 12,
   "disposition": "SPEC_READY_FOR_HUMAN_REVIEW",
   "releaseAuthorized": false,
   "externalMutation": false,
   "receipt": {
     "version": "GymOpsDecisionReceipt.v1",
-    "ruleSetVersion": "GO-1.0.0",
-    "inputDigest": "aac5cc3091bf4b4639ed52a63d3396dbc9abc7fd2059ade7576eea221a875509",
-    "controlDigest": "fec9c0fb3a15fb78bc478aa19d5dc808ee3c0e2a220b4e9c0455756e1d69f1d9",
+    "ruleSetVersion": "GO-1.1.0",
+    "inputDigest": "4687c76d1b36f143ff71a65b3c43352fd37e0a934ad4885e3e0d19cf94abc475",
+    "controlDigest": "7293e8fb63e640c93401a5cb9b4c21b8578c167b4601bbe36aa2bd101e5c93b5",
     "disposition": "SPEC_READY_FOR_HUMAN_REVIEW",
     "releaseAuthorized": false,
     "externalMutation": false,
@@ -141,6 +141,8 @@
         "code": "GO-R09_PASS",
         "summary": "The baseline is honest and the outcome contract includes no-harm guardrails.",
         "evidence": [
+          "baselineState:UNKNOWN",
+          "baselineEvidence:NONE",
           "UNKNOWN until an authorized implementation supplies a measured current-state baseline.",
           "Share of released synthetic places reaching a terminal reserved or explicitly blocked state within the measurement window.",
           "Any capacity overflow",
@@ -174,6 +176,23 @@
         "evidence": [
           "coverage:1",
           "review:PENDING",
+          "externalMutation:false"
+        ]
+      },
+      {
+        "id": "GO-R12",
+        "name": "Waitlist transition integrity",
+        "state": "PASS",
+        "code": "GO-R12_PASS",
+        "summary": "Capacity, eligibility, permission, active-token, expiry, pause/resume, blocked-member, and exact-reset behavior are explicit and no-write bounded.",
+        "evidence": [
+          "happy:OFFER_ACTIVE to RESERVED",
+          "expiry:EXPIRED to next OFFER_ACTIVE",
+          "ineligible:BLOCKED_INELIGIBLE",
+          "no-permission:BLOCKED_PERMISSION",
+          "full:BLOCKED_FULL",
+          "paused:BLOCKED_PAUSED",
+          "reset:Exact seed digest restored",
           "externalMutation:false"
         ]
       }

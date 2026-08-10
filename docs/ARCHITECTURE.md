@@ -9,7 +9,7 @@ Repository seed
     |
     +-- Zod schemas --> parsed DecisionPacket
     |                         |
-    |                         +-- 11 deterministic evaluators
+    |                         +-- 12 deterministic evaluators
     |                         |        |
     |                         |        +-- canonical decision receipt
     |                         |
@@ -32,13 +32,15 @@ Repository seed
 
 ## Determinism contract
 
-Canonical serialization recursively sorts object keys and preserves array order. SHA-256 covers the normalized packet, control result list, and prototype state. Identical input plus the same `GO-1.0.0` rule set must produce byte-identical output. No current time, locale formatter, random value, browser fingerprint, or provider value enters the receipt.
+Canonical serialization recursively sorts object keys and preserves array order. SHA-256 covers the normalized packet, control result list, and prototype state. Identical input plus the same `GO-1.1.0` rule set must produce byte-identical output. No current time, locale formatter, random value, browser fingerprint, or provider value enters the receipt.
 
-The offer token is derived from the synthetic member identifier, queue position, and local scenario minute. It is not an authentication token and never leaves local state.
+The offer token is derived from the synthetic member identifier, queue position, and local scenario minute. It is not an authentication token and never leaves local state. Acceptance requires a supplied token equal to the current active offer token; omission, mismatch, staleness, and expiry all fail without reserving.
+
+Baseline provenance is structural rather than lexical. `baselineState`, `baselineEvidenceIds`, and the anchored baseline description are evaluated together, so a word such as `Unsourced` cannot pass because it happens to contain `sourced`. Counterevidence is also referential: identifiers must resolve to permitted strategy-class synthetic signals and may not also serve as supporting evidence.
 
 ## Rule integrity
 
-The registry expects exactly eleven rule identifiers. A missing rule or undefined evaluator produces `INDETERMINATE`, never pass. Each identifier is bound to one canonical failure code outside the evaluator. Substituting a different code produces `EVALUATOR_CONTRACT_BREACH`; therefore a rejection for an adjacent reason cannot satisfy the intended check.
+The registry expects the twelve P0 rule identifiers defined by the package contract. A missing rule or undefined evaluator produces `INDETERMINATE`, never pass. Each identifier is bound to one canonical failure code outside the evaluator. Substituting a different code produces `EVALUATOR_CONTRACT_BREACH`; therefore a rejection for an adjacent reason cannot satisfy the intended check. The twelfth evaluator joins the declared waitlist scenarios to capacity, eligibility, communication permission, active-token, one-position expiry, pause, blocked-member, exact-reset, and `externalMutation=false` acceptance requirements.
 
 The receipt verifier independently recomputes packet and result digests. A receipt from another packet returns `STALE_RECEIPT_REPLAY`; a modified result list returns `CONTROL_DIGEST_MISMATCH`.
 

@@ -287,7 +287,7 @@ code { overflow-wrap: anywhere; word-break: break-word; font-family: "SFMono-Reg
 .control-list { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line-dark); }
 .control-list article { display: grid; grid-template-columns: 100px 1fr; gap: 1rem; min-height: 170px; padding: 1.25rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .control-list article > div { min-width: 0; }
-.control-list article:last-child { grid-column: 1 / -1; }
+.control-list article:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .control-id { display: flex; flex-direction: column; gap: .7rem; align-items: start; }
 .control-list h2 { font: 800 1rem/1.2 inherit; letter-spacing: 0; }
 .control-list p { color: var(--ink-soft); font-size: .78rem; }

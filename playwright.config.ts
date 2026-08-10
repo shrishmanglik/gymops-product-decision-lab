@@ -13,7 +13,10 @@ export default defineConfig({
   webServer: {
     command: "npm run start -- -p 3100",
     url: "http://127.0.0.1:3100",
-    reuseExistingServer: !process.env.CI,
+    // Fail on a port collision instead of silently testing a stale or foreign
+    // build. Every browser and screenshot proof must start this worktree's
+    // exact production bundle.
+    reuseExistingServer: false,
     timeout: 120_000,
   },
   projects: [

@@ -20,6 +20,26 @@ describe("timed waitlist state machine", () => {
     expect(reserved.events.every((event) => event.externalMutation === false)).toBe(true);
   });
 
+  it("refuses acceptance when the current offer token is omitted", () => {
+    const offered = issueNextOffer(cancelPlace(createScenario("happy")));
+    const result = acceptOffer(offered);
+    expect(result.status).toBe("OFFER_ACTIVE");
+    expect(result.booked).toBe(11);
+    expect(result.activeOffer?.token).toBe(offered.activeOffer?.token);
+    expect(result.events.at(-1)?.reason).toBe("OFFER_TOKEN_REQUIRED");
+    expect(result.events.at(-1)?.externalMutation).toBe(false);
+  });
+
+  it("accepts only the supplied current offer token", () => {
+    const offered = issueNextOffer(cancelPlace(createScenario("happy")));
+    const result = acceptOffer(offered, offered.activeOffer?.token);
+    expect(result.status).toBe("RESERVED");
+    expect(result.booked).toBe(12);
+    expect(result.activeOffer).toBeNull();
+    expect(result.events.at(-1)?.reason).toBe("ACTIVE_OFFER_RESERVED");
+    expect(result.events.at(-1)?.externalMutation).toBe(false);
+  });
+
   it("expires one offer and advances exactly one queue position", () => {
     const offered = runPrimaryStep(createScenario("expiry"));
     const advanced = runPrimaryStep(offered);
@@ -68,7 +88,7 @@ describe("timed waitlist state machine", () => {
   it("never reserves over capacity when capacity changes", () => {
     const offered = issueNextOffer(cancelPlace(createScenario("happy")));
     const externallyFilledSyntheticState = { ...offered, booked: offered.capacity };
-    const result = acceptOffer(externallyFilledSyntheticState);
+    const result = acceptOffer(externallyFilledSyntheticState, offered.activeOffer?.token);
     expect(result.status).toBe("BLOCKED_FULL");
     expect(result.booked).toBe(result.capacity);
   });

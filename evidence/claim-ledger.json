@@ -3,7 +3,7 @@
   "claimCeiling": "SOTA_CANDIDATE",
   "claims": [
     { "claim": "Synthetic signal-to-spec workflow", "state": "IMPLEMENTED", "proof": ["lib/data/seed.ts", "app/signals/page.tsx", "app/decision/page.tsx"] },
-    { "claim": "Eleven fail-closed product controls", "state": "IMPLEMENTED", "proof": ["lib/engine/control-engine.ts", "tests/engine/fixture-controls.test.ts", "tests/engine/adversarial-controls.test.ts"] },
+    { "claim": "Twelve fail-closed P0 product controls with 24 paired fixtures", "state": "IMPLEMENTED", "proof": ["lib/engine/control-engine.ts", "fixtures/", "tests/engine/fixture-controls.test.ts", "tests/engine/adversarial-controls.test.ts"] },
     { "claim": "Functioning timed waitlist prototype", "state": "IMPLEMENTED", "proof": ["lib/prototype/waitlist-machine.ts", "components/prototype-lab.tsx", "tests/prototype/waitlist-machine.test.ts"] },
     { "claim": "Engineer-buildable contract", "state": "IMPLEMENTED", "proof": ["app/spec/page.tsx", "docs/PRD.md"] },
     { "claim": "No runtime AI, accounts, persistence, secrets, or external writes in the public journey", "state": "IMPLEMENTED", "proof": ["docs/ARCHITECTURE.md", "tests/e2e/security-boundary.spec.ts"] },

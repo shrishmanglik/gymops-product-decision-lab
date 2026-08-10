@@ -171,7 +171,7 @@ export const seedPacket: DecisionPacket = {
     },
   ],
   scenarios: [
-    { id: "happy", name: "Eligible acceptance", preconditions: ["One place released", "Eligible member", "Permission present"], action: "Issue and accept offer", expectedTransition: "OFFER_ACTIVE to RESERVED", failureState: "Duplicate acceptance", recoveryAction: "Reject duplicate and preserve reservation" },
+    { id: "happy", name: "Eligible acceptance", preconditions: ["One place released", "Eligible member", "Permission present", "Current offer token supplied"], action: "Issue offer and accept with its matching current token", expectedTransition: "OFFER_ACTIVE to RESERVED", failureState: "Missing, wrong, stale, or duplicate acceptance", recoveryAction: "Reject invalid token input and preserve the active offer or reservation" },
     { id: "expiry", name: "Offer expiry", preconditions: ["Offer active", "Second member queued"], action: "Advance beyond deadline", expectedTransition: "EXPIRED to next OFFER_ACTIVE", failureState: "Stale offer replay", recoveryAction: "Reject stale token and retain current offer" },
     { id: "ineligible", name: "Membership restriction", preconditions: ["Next member ineligible"], action: "Attempt offer", expectedTransition: "BLOCKED_INELIGIBLE", failureState: "Offer issued", recoveryAction: "Hold and require staff resolution" },
     { id: "no-permission", name: "Communication permission absent", preconditions: ["No valid permission"], action: "Attempt offer", expectedTransition: "BLOCKED_PERMISSION", failureState: "Notification implied", recoveryAction: "Hold without external contact" },
@@ -181,6 +181,8 @@ export const seedPacket: DecisionPacket = {
   ],
   outcome: {
     baseline: "UNKNOWN until an authorized implementation supplies a measured current-state baseline.",
+    baselineState: "UNKNOWN",
+    baselineEvidenceIds: [],
     leadingIndicator: "Share of released synthetic places reaching a terminal reserved or explicitly blocked state within the measurement window.",
     guardrails: {
       member: "No offer to an ineligible member or a member without valid communication permission.",
@@ -199,7 +201,7 @@ export const seedPacket: DecisionPacket = {
     currentState: ["Synthetic cancellation creates one available place", "Queue order is repository-owned", "All product and provider integrations remain unknown"],
     transitions: ["FULL to PLACE_AVAILABLE", "PLACE_AVAILABLE to OFFER_ACTIVE", "OFFER_ACTIVE to RESERVED", "OFFER_ACTIVE to EXPIRED", "Any active state to PAUSED", "Any state to exact SEED on reset"],
     edgeCases: ["Ineligible member", "Missing communication permission", "Full capacity", "Staff pause", "Offer expiry", "Stale acceptance", "Duplicate acceptance", "Queue exhausted"],
-    acceptanceCriteria: ["Never reserve above capacity", "Never issue an offer without eligibility and permission", "Only the active unexpired offer can be accepted", "Expiry advances at most one queue position", "Pause blocks progression", "Reset restores the seed digest", "Receipt is byte-stable for identical state"],
+    acceptanceCriteria: ["Never reserve above capacity", "Never issue an offer without eligibility and permission", "Only a supplied token matching the active unexpired offer can be accepted", "Expiry advances at most one queue position", "Pause blocks progression", "Reset restores the seed digest", "Receipt is byte-stable for identical state"],
     instrumentation: ["Local transition reason", "Synthetic member identifier", "Previous and next state", "Canonical receipt digest", "No external event"],
     rollout: ["PROPOSED: internal synthetic replay, then bounded opt-in pilot only after product evidence and jurisdiction review"],
     rollback: ["Pause progression", "Invalidate current offer", "Return to manual handling", "Reconcile the canonical event trail"],

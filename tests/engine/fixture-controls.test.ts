@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { seedPacket } from "@/lib/data/seed";
-import { evaluatePacket, type RuleId } from "@/lib/engine/control-engine";
+import { evaluatePacket, ruleIds, type RuleId } from "@/lib/engine/control-engine";
 import type { DecisionPacket } from "@/lib/domain/schema";
 
 type Fixture = {
@@ -31,9 +31,14 @@ function mutate(name: string): DecisionPacket {
     case "omit-membership-surface": candidate.affectedSurfaces = ["scheduling", "attendance", "communications"]; break;
     case "replace-reject-reason": rejected.reasonCodes = ["POPULAR_REQUEST", "LOW_EFFORT"]; break;
     case "replace-edge-cases": packet.spec.edgeCases = ["Slow screen", "Wide screen", "Old browser", "Refresh", "Back navigation"]; break;
-    case "invent-baseline": packet.outcome.baseline = "Estimated 20 percent improvement without a source."; break;
+    case "invent-baseline": packet.outcome.baseline = "Unsourced 20 percent improvement."; break;
     case "remove-reversibility": candidate.reversible = false; break;
     case "lower-citation-coverage": packet.aiReceipt.citationCoverage = 0.5; break;
+    case "break-waitlist-transition-integrity": {
+      const expiry = packet.scenarios.find((scenario) => scenario.id === "expiry")!;
+      expiry.expectedTransition = "EXPIRED to third OFFER_ACTIVE";
+      break;
+    }
     default: throw new Error(`Unknown fixture mutation: ${name}`);
   }
   return packet;
@@ -41,8 +46,7 @@ function mutate(name: string): DecisionPacket {
 
 describe("known-bad and clean fixture pairs", () => {
   it("contains one bad and one clean fixture for every control", () => {
-    for (const index of Array.from({ length: 11 }, (_, item) => item + 1)) {
-      const id = `GO-R${String(index).padStart(2, "0")}`;
+    for (const id of ruleIds) {
       expect(fixtures.filter((fixture) => fixture.ruleId === id && fixture.mutation === "none")).toHaveLength(1);
       expect(fixtures.filter((fixture) => fixture.ruleId === id && fixture.mutation !== "none")).toHaveLength(1);
     }

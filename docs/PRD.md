@@ -61,7 +61,7 @@ A requested solution must resolve to a separate problem frame with evidence, cou
 
 ### FR-04 Evidence convergence
 
-Priority requires at least two source classes and visible counterevidence. One loud request cannot satisfy the contract.
+Priority requires at least two source classes and visible counterevidence. Every counterevidence identifier must resolve to a permitted synthetic signal, carry counterevidence semantics, and remain separate from the supporting-evidence list. One loud request, a dangling identifier, or the same signal counted on both sides cannot satisfy the contract.
 
 ### FR-05 Actor cost
 
@@ -81,7 +81,7 @@ The handoff contains goal, scope, non-goals, current state, state transitions, a
 
 ### FR-09 Measurement
 
-A baseline is sourced or `UNKNOWN`. The outcome contract contains a leading indicator plus member, operator, reliability, and support guardrails.
+A baseline has an explicit provenance state: `UNKNOWN` with zero evidence identifiers, or `SOURCED` with one or more permitted signal identifiers and a description beginning with `SOURCED`. Substring matches such as `Unsourced` never establish provenance. The outcome contract contains a leading indicator plus member, operator, reliability, and support guardrails.
 
 ### FR-10 Reversibility
 
@@ -91,13 +91,17 @@ The selected intervention has a staff pause, bounded rollout, explicit rollback 
 
 AI suggestions cite only permitted evidence identifiers or remain suggestions. The control refuses author self-approval and all external mutation.
 
+### FR-12 Waitlist transition integrity
+
+The declared scenarios and acceptance contract must jointly cover capacity, eligibility, communication permission, a supplied token matching the current active unexpired offer, one-position expiry advance, staff pause/resume, blocked-member handling, exact seed reset, and `externalMutation=false`.
+
 ## 6. Prototype state contract
 
 The prototype exposes `FULL`, `PLACE_AVAILABLE`, `OFFER_ACTIVE`, `RESERVED`, `EXPIRED`, `BLOCKED_INELIGIBLE`, `BLOCKED_PERMISSION`, `BLOCKED_FULL`, `BLOCKED_PAUSED`, and `QUEUE_EXHAUSTED`.
 
 Required executable scenarios:
 
-- eligible acceptance before expiry;
+- eligible acceptance before expiry only when the supplied token matches the current active offer;
 - expiry and one-position advancement;
 - membership restriction;
 - missing communication permission;
@@ -133,7 +137,7 @@ The work sample does not establish employment tenure, B2B software tenure, indus
 ### IMPLEMENTED after local proof
 
 - Synthetic signal-to-spec workflow.
-- Eleven deterministic controls with paired fixtures.
+- Twelve deterministic P0 controls with 24 paired fixtures, including executable waitlist-transition integrity.
 - Timed waitlist state machine and recovery paths.
 - Buildable specification and canonical receipt.
 - Responsive no-login user journey.

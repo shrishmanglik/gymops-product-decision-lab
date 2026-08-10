@@ -30,7 +30,7 @@ export default function HomePage() {
         </div>
         <aside className="control-preview" aria-label="Current control receipt summary">
           <div className="preview-header">
-            <span>CONTROL RECEIPT / GO-1.0.0</span>
+            <span>CONTROL RECEIPT / {receipt.ruleSetVersion}</span>
             <StatusPill tone={receipt.disposition === "SPEC_READY_FOR_HUMAN_REVIEW" ? "good" : "warn"}>
               {receipt.disposition}
             </StatusPill>
@@ -41,7 +41,7 @@ export default function HomePage() {
           </div>
           <div className="control-tally">
             <strong>{receipt.results.filter((result) => result.state === "PASS").length}</strong>
-            <span>of 11 fail-closed controls pass on the clean seed</span>
+            <span>of {receipt.results.length} fail-closed controls pass on the clean seed</span>
           </div>
           <div className="mini-rules" aria-hidden="true">
             {receipt.results.map((result) => <span key={result.id} className={result.state === "PASS" ? "passed" : "failed"}>{result.id.replace("GO-", "")}</span>)}

@@ -95,6 +95,8 @@ export const scenarioSchema = z.object({
 
 export const outcomeContractSchema = z.object({
   baseline: z.string(),
+  baselineState: z.enum(["UNKNOWN", "SOURCED"]),
+  baselineEvidenceIds: z.array(z.string()),
   leadingIndicator: z.string(),
   guardrails: z.object({
     member: z.string(),

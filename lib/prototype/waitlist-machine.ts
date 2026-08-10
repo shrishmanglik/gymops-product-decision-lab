@@ -127,7 +127,10 @@ export function acceptOffer(state: WaitlistState, token?: string): WaitlistState
   if (state.nowMinute >= offer.expiresAtMinute) {
     return append({ ...state, activeOffer: null }, "ACCEPT_OFFER", "EXPIRED", "OFFER_ALREADY_EXPIRED", offer.memberId);
   }
-  if (token && token !== offer.token) {
+  if (!token) {
+    return append(state, "ACCEPT_OFFER", state.status, "OFFER_TOKEN_REQUIRED", offer.memberId);
+  }
+  if (token !== offer.token) {
     return append(state, "ACCEPT_OFFER", state.status, "STALE_OR_WRONG_OFFER_TOKEN", offer.memberId);
   }
   if (state.booked >= state.capacity) {
@@ -180,7 +183,7 @@ export function runPrimaryStep(state: WaitlistState): WaitlistState {
   if (state.status === "FULL" && state.scenario === "full") return issueNextOffer(state);
   if (state.status === "PLACE_AVAILABLE") return issueNextOffer(state);
   if (state.status === "OFFER_ACTIVE" && state.scenario === "expiry") return advanceTime(state, 11);
-  if (state.status === "OFFER_ACTIVE") return acceptOffer(state);
+  if (state.status === "OFFER_ACTIVE") return acceptOffer(state, state.activeOffer?.token);
   if (state.status.startsWith("BLOCKED_") && !state.paused) return skipBlockedMember(state);
   if (state.status === "BLOCKED_PAUSED") return setPaused(state, false);
   return state;

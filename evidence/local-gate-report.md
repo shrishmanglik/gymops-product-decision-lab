@@ -6,6 +6,8 @@
 
 This report records author-side preparation on the uncommitted task tree. A clean exact-commit clone, distinct reviewer verdict, provider binding, anonymous live smoke, and application-package link remain release-lane work.
 
+Browser proof refuses to reuse an existing server on port 3100. A collision fails closed, and every successful run starts this worktree's exact production bundle.
+
 ## Two complete final passes
 
 The identical final source state completed the following sequence twice:
@@ -20,16 +22,16 @@ Both passes produced:
 
 - typecheck: pass;
 - lint with zero warnings: pass;
-- unit, known-bad/clean, mutation, security, recovery, and proof-binding tests: 45 of 45 pass;
-- contamination scan: 50 current material files compared with 1,359 files across 43 sibling repositories; zero banned findings and zero normalized prose collisions;
+- unit, known-bad/clean, mutation, security, recovery, and proof-binding tests: 56 of 56 pass;
+- contamination scan: 52 current material files compared with 1,359 files across 43 sibling repositories; zero population gaps, banned findings, or normalized prose collisions;
 - optimized production build: pass, six product routes statically generated;
-- normalized decision proof: 11 clean controls, 22 fixture files, byte-identical repeat output;
-- local proof SHA-256: `5f55634eca2b7fe68ead3888bf610138066c453bca0d5ca7d8ba388f78855947` on both passes;
+- normalized decision proof: 12 clean controls, 24 fixture files, byte-identical repeat output;
+- local proof SHA-256: `a02713e923b89d2db060ca6b76e840f169a62bcdad30d893dbc13f6f1a4194f0` on both passes;
 - browser suite: 22 of 22 pass twice in desktop and mobile Chromium projects, including the HTTP security and no-off-origin-request boundary;
-- eight screenshot outputs are byte-identical across two complete capture runs after evidence-only sticky-surface freezing and deterministic PNG normalization;
+- eight screenshot outputs are byte-identical across two complete capture runs after evidence-only sticky-surface freezing, deterministic PNG normalization, and an asserted zero-transition capture boundary;
 - release authorization: false.
 
-The production dependency audit separately returned zero vulnerabilities. The combined two-pass shell command reached its 120-second orchestration limit after the second build and deterministic proof, so the unfinished second browser suite and audit were run as a separate checked command. That second browser suite passed 22 of 22 and the audit again reported zero vulnerabilities; the timeout itself is not represented as a green gate.
+The production dependency audit returned zero vulnerabilities after each complete pass. Screenshot SHA-256 manifests taken before pass one, after pass one, and after pass two were identical for all eight files.
 
 ## Route inventory
 
@@ -44,7 +46,7 @@ The production dependency audit separately returned zero vulnerabilities. The co
 
 ## Control and fixture inventory
 
-Each `GO-R01` through `GO-R11` has one named known-bad JSON fixture and one clean counterpart. Additional tests remove a rule, disable an evaluator, substitute a wrong failure code, corrupt evidence and control digests, replay a stale receipt, attempt author self-approval, and infer an international rule from one locale. Every adverse case blocks with its exact expected code while the clean seed passes in the same suite.
+Each `GO-R01` through `GO-R12` has one named known-bad JSON fixture and one clean counterpart. `GO-R12` is the package-contract join: it verifies the declared waitlist scenarios and acceptance requirements for capacity, eligibility, permission, a supplied token matching the active unexpired offer, one-position expiry, pause/resume, blocked-member handling, exact reset, and `externalMutation=false`. Dedicated mutations disable this evaluator and substitute its reason code; both become `INDETERMINATE`. The token-omission test fails if acceptance stops requiring the current token or returns the wrong code. `GO-R04` rejects unknown or semantically invalid counterevidence references, and `GO-R09` evaluates explicit baseline state plus evidence identifiers rather than a substring; clean counterparts pass in the same run, and detector-disable and wrong-code mutations become `INDETERMINATE`. Additional tests corrupt evidence and control digests, replay a stale receipt, attempt author self-approval, and infer an international rule from one locale. Every adverse case blocks with its exact expected code while the clean seed passes in the same suite.
 
 ## Prototype inventory
 
@@ -55,6 +57,7 @@ Each `GO-R01` through `GO-R11` has one named known-bad JSON fixture and one clea
 - Full capacity.
 - Staff pause and explicit resume.
 - Wrong or stale offer token.
+- Missing offer token.
 - Post-expiry acceptance.
 - Capacity change before acceptance.
 - Exact repository-seed reset.

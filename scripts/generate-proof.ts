@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { canonicalJson, digest } from "../lib/engine/canonical";
-import { evaluatePacket, verifyReceipt } from "../lib/engine/control-engine";
+import { evaluatePacket, ruleIds, verifyReceipt } from "../lib/engine/control-engine";
 import { seedPacket } from "../lib/data/seed";
 
 const first = evaluatePacket(seedPacket);
@@ -16,8 +16,8 @@ if (firstBytes !== secondBytes) {
 if (!verifyReceipt(first, seedPacket).valid) {
   throw new Error("RECEIPT_VERIFICATION_FAILURE: clean receipt did not verify");
 }
-if (first.results.length !== 11 || first.results.some((result) => result.state !== "PASS")) {
-  throw new Error("CONTROL_FAILURE: clean seed did not pass all eleven controls");
+if (first.results.length !== ruleIds.length || first.results.some((result) => result.state !== "PASS")) {
+  throw new Error(`CONTROL_FAILURE: clean seed did not pass all ${ruleIds.length} controls`);
 }
 
 const fixtureFiles = readdirSync(join(process.cwd(), "fixtures")).filter((name) => name.endsWith(".json"));
@@ -31,7 +31,7 @@ const proof = {
   secondSha256: digest(secondBytes),
   byteIdentical: firstBytes === secondBytes,
   fixtureFiles: fixtureFiles.length,
-  expectedFixturePairs: 11,
+  expectedFixturePairs: ruleIds.length,
   cleanControls: first.results.length,
   disposition: first.disposition,
   releaseAuthorized: false,

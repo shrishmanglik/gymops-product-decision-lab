@@ -4,8 +4,10 @@ import { digest } from "@/lib/engine/canonical";
 
 export const ruleIds = [
   "GO-R01", "GO-R02", "GO-R03", "GO-R04", "GO-R05", "GO-R06",
-  "GO-R07", "GO-R08", "GO-R09", "GO-R10", "GO-R11",
+  "GO-R07", "GO-R08", "GO-R09", "GO-R10", "GO-R11", "GO-R12",
 ] as const;
+
+export const ruleSetVersion = "GO-1.1.0" as const;
 
 export type RuleId = (typeof ruleIds)[number];
 
@@ -21,6 +23,7 @@ const ruleContracts: Record<RuleId, { name: string; failCode: string }> = {
   "GO-R09": { name: "Measurement", failCode: "MEASUREMENT_CONTRACT_INCOMPLETE" },
   "GO-R10": { name: "Reversibility", failCode: "REVERSIBILITY_CONTRACT_INCOMPLETE" },
   "GO-R11": { name: "AI accountability", failCode: "AI_ACCOUNTABILITY_BREACH" },
+  "GO-R12": { name: "Waitlist transition integrity", failCode: "WAITLIST_TRANSITION_INTEGRITY_BREACH" },
 };
 
 export interface RuleEvaluation {
@@ -103,9 +106,15 @@ export const controlRules: ControlRule[] = [
     id: "GO-R04",
     failCode: ruleContracts["GO-R04"].failCode,
     evaluate: (packet) => {
+      const signalsById = new Map(packet.signals.map((item) => [item.id, item]));
       const evidence = packet.signals.filter((item) => packet.problem.evidenceIds.includes(item.id));
       const sourceClasses = new Set(evidence.map((item) => item.sourceClass));
-      const valid = evidence.length >= 2 && sourceClasses.size >= 2 && packet.problem.counterEvidenceIds.length > 0;
+      const counterEvidence = packet.problem.counterEvidenceIds.map((id) => signalsById.get(id));
+      const counterEvidenceValid =
+        new Set(packet.problem.counterEvidenceIds).size === packet.problem.counterEvidenceIds.length &&
+        counterEvidence.every((item) => item?.sourceClass === "strategy") &&
+        packet.problem.counterEvidenceIds.every((id) => !packet.problem.evidenceIds.includes(id));
+      const valid = evidence.length >= 2 && sourceClasses.size >= 2 && counterEvidenceValid;
       return {
         pass: valid,
         evidence: [...sourceClasses, ...packet.problem.counterEvidenceIds],
@@ -205,7 +214,12 @@ export const controlRules: ControlRule[] = [
     id: "GO-R09",
     failCode: ruleContracts["GO-R09"].failCode,
     evaluate: (packet) => {
-      const baselineHonest = packet.outcome.baseline.startsWith("UNKNOWN") || packet.outcome.baseline.includes("sourced");
+      const knownSignalIds = new Set(packet.signals.map((signal) => signal.id));
+      const baselineHonest = packet.outcome.baselineState === "UNKNOWN"
+        ? /^UNKNOWN(?:\b|:)/.test(packet.outcome.baseline) && packet.outcome.baselineEvidenceIds.length === 0
+        : /^SOURCED(?:\b|:)/.test(packet.outcome.baseline) &&
+          packet.outcome.baselineEvidenceIds.length > 0 &&
+          packet.outcome.baselineEvidenceIds.every((id) => knownSignalIds.has(id));
       const valid =
         baselineHonest &&
         packet.outcome.leadingIndicator.length > 0 &&
@@ -213,7 +227,13 @@ export const controlRules: ControlRule[] = [
         packet.outcome.stopConditions.length >= 2;
       return {
         pass: valid,
-        evidence: [packet.outcome.baseline, packet.outcome.leadingIndicator, ...packet.outcome.stopConditions],
+        evidence: [
+          `baselineState:${packet.outcome.baselineState}`,
+          `baselineEvidence:${packet.outcome.baselineEvidenceIds.join(",") || "NONE"}`,
+          packet.outcome.baseline,
+          packet.outcome.leadingIndicator,
+          ...packet.outcome.stopConditions,
+        ],
         summary: valid
           ? "The baseline is honest and the outcome contract includes no-harm guardrails."
           : "The measurement plan invents a baseline or omits a guardrail.",
@@ -268,6 +288,58 @@ export const controlRules: ControlRule[] = [
       };
     },
   },
+  {
+    id: "GO-R12",
+    failCode: ruleContracts["GO-R12"].failCode,
+    evaluate: (packet) => {
+      const scenarios = new Map(packet.scenarios.map((scenario) => [scenario.id, scenario]));
+      const normalizedAcceptance = packet.spec.acceptanceCriteria.map((criterion) => criterion.toLowerCase());
+      const hasAcceptance = (...terms: string[]) =>
+        normalizedAcceptance.some((criterion) => terms.every((term) => criterion.includes(term)));
+      const expectedTransitions = {
+        happy: ["reserved"],
+        expiry: ["expired", "next", "offer_active"],
+        ineligible: ["blocked_ineligible"],
+        "no-permission": ["blocked_permission"],
+        full: ["blocked_full"],
+        paused: ["blocked_paused"],
+        reset: ["seed", "restored"],
+      } as const;
+      const scenariosValid = Object.entries(expectedTransitions).every(([id, terms]) => {
+        const transition = scenarios.get(id)?.expectedTransition.toLowerCase() ?? "";
+        return terms.every((term) => transition.includes(term));
+      });
+      const recoveryTerms = {
+        ineligible: ["staff", "resolution"],
+        "no-permission": ["hold", "external", "contact"],
+        full: ["queue", "unchanged"],
+        paused: ["resume", "staff"],
+        reset: ["replace", "repository", "seed"],
+      } as const;
+      const recoveryValid = Object.entries(recoveryTerms).every(([id, terms]) => {
+        const recovery = scenarios.get(id)?.recoveryAction.toLowerCase() ?? "";
+        return terms.every((term) => recovery.includes(term));
+      });
+      const acceptanceValid =
+        hasAcceptance("above capacity") &&
+        hasAcceptance("eligibility", "permission") &&
+        hasAcceptance("supplied", "token", "matching", "active", "unexpired", "offer") &&
+        hasAcceptance("one", "queue position") &&
+        hasAcceptance("pause", "blocks") &&
+        hasAcceptance("reset", "seed digest");
+      const valid = scenariosValid && recoveryValid && acceptanceValid && packet.externalMutation === false;
+      return {
+        pass: valid,
+        evidence: [
+          ...Object.keys(expectedTransitions).map((id) => `${id}:${scenarios.get(id)?.expectedTransition ?? "MISSING"}`),
+          `externalMutation:${packet.externalMutation}`,
+        ],
+        summary: valid
+          ? "Capacity, eligibility, permission, active-token, expiry, pause/resume, blocked-member, and exact-reset behavior are explicit and no-write bounded."
+          : "The waitlist contract permits an unsafe transition, omits a required blocked path, or escapes the no-write boundary.",
+      };
+    },
+  },
 ];
 
 export interface ControlResult {
@@ -281,7 +353,7 @@ export interface ControlResult {
 
 export interface DecisionReceipt {
   version: "GymOpsDecisionReceipt.v1";
-  ruleSetVersion: "GO-1.0.0";
+  ruleSetVersion: typeof ruleSetVersion;
   inputDigest: string;
   controlDigest: string;
   disposition: "SPEC_READY_FOR_HUMAN_REVIEW" | "INDETERMINATE";
@@ -304,7 +376,7 @@ export function evaluatePacket(packetInput: unknown, registry: ControlRule[] = c
     };
     return {
       version: "GymOpsDecisionReceipt.v1",
-      ruleSetVersion: "GO-1.0.0",
+      ruleSetVersion,
       inputDigest,
       controlDigest: digest([result]),
       disposition: "INDETERMINATE",
@@ -353,7 +425,7 @@ export function evaluatePacket(packetInput: unknown, registry: ControlRule[] = c
   const accepted = results.every((result) => result.state === "PASS");
   return {
     version: "GymOpsDecisionReceipt.v1",
-    ruleSetVersion: "GO-1.0.0",
+    ruleSetVersion,
     inputDigest,
     controlDigest: digest(results),
     disposition: accepted ? "SPEC_READY_FOR_HUMAN_REVIEW" : "INDETERMINATE",

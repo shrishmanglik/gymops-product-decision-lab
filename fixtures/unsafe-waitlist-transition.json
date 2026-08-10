@@ -1,0 +1,1 @@
+{"ruleId":"GO-R12","case":"unsafe-waitlist-transition","mutation":"break-waitlist-transition-integrity","expectedCode":"WAITLIST_TRANSITION_INTEGRITY_BREACH"}
